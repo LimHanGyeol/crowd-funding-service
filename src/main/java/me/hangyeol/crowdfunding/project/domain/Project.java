@@ -1,4 +1,4 @@
-package me.hangyeol.crowdfunding.model;
+package me.hangyeol.crowdfunding.project.domain;
 
 import javax.persistence.Entity;
 
