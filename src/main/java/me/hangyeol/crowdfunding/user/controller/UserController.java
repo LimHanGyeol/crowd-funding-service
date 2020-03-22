@@ -1,8 +1,8 @@
 package me.hangyeol.crowdfunding.user.controller;
 
+import me.hangyeol.crowdfunding.support.utils.HttpSessionUtil;
 import me.hangyeol.crowdfunding.user.domain.User;
-import me.hangyeol.crowdfunding.user.domain.UserRepository;
-import me.hangyeol.crowdfunding.user.dto.UserDto;
+import me.hangyeol.crowdfunding.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/login")
     public String loginForm() {
@@ -28,22 +28,16 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String email, String password, HttpSession session) {
-        System.out.println("=====eamil : " + email + ", password : " + password);
-        User user = userRepository.findByEmail(email);
+        User user = userService.login(email, password);
 
-        if (user == null) {
-            return "redirect:login";
-        }
-
-        session.setAttribute("user", user);
-
+        if (user == null) return "redirect:login";
+        session.setAttribute(HttpSessionUtil.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @PostMapping("/join")
     public String join(User user) {
-        System.out.println("=====User : " + user);
-        userRepository.save(user);
-        return "home";
+        userService.join(user);
+        return "login";
     }
 }
