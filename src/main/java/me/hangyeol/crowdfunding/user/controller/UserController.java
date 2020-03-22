@@ -1,7 +1,7 @@
 package me.hangyeol.crowdfunding.user.controller;
 
 import me.hangyeol.crowdfunding.support.utils.HttpSessionUtil;
-import me.hangyeol.crowdfunding.user.domain.User;
+import me.hangyeol.crowdfunding.user.dto.UserDto;
 import me.hangyeol.crowdfunding.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,16 +28,15 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String email, String password, HttpSession session) {
-        User user = userService.login(email, password);
-
+        UserDto.InfoRequest user = userService.login(email, password);
         if (user == null) return "redirect:login";
         session.setAttribute(HttpSessionUtil.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @PostMapping("/join")
-    public String join(User user) {
-        userService.join(user);
+    public String join(UserDto.JoinRequest userDto) {
+        userService.join(userDto);
         return "login";
     }
 }
