@@ -26,10 +26,10 @@ public class Project {
     private String explanation;
 
     @Column(nullable = false)
-    private LocalDateTime startDateTime;
+    private String startDateTime;
 
     @Column(nullable = false)
-    private LocalDateTime endDateTime;
+    private String endDateTime;
 
     @Column(nullable = false)
     private Long targetFigure;
@@ -40,4 +40,13 @@ public class Project {
     @Column(nullable = false)
     private String state;
 
+    public Project(String title, String explanation, String startDateTime, String endDateTime, Long targetFigure, String openState, String state) {
+        this.title = title;
+        this.explanation = explanation;
+        this.startDateTime = startDateTime;
+        this.endDateTime = endDateTime;
+        this.targetFigure = targetFigure;
+        this.openState = openState;
+        this.state = state;
+    }
 }
