@@ -1,6 +1,7 @@
 package me.hangyeol.crowdfunding.support.utils;
 
 import me.hangyeol.crowdfunding.user.domain.User;
+import me.hangyeol.crowdfunding.user.dto.UserDto;
 
 import javax.servlet.http.HttpSession;
 
@@ -13,8 +14,8 @@ public class HttpSessionUtil {
         return true;
     }
 
-    public static User getUserSession(HttpSession session) {
+    public static UserDto.InfoRequest getUserSession(HttpSession session) {
         if (!isLoginUserSession(session)) return null;
-        return (User) session.getAttribute(USER_SESSION_KEY);
+        return (UserDto.InfoRequest) session.getAttribute(USER_SESSION_KEY);
     }
 }

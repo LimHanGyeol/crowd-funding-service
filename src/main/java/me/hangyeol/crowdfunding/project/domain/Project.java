@@ -1,12 +1,14 @@
 package me.hangyeol.crowdfunding.project.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import me.hangyeol.crowdfunding.user.domain.User;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 @Entity
@@ -25,11 +27,15 @@ public class Project {
     @Column(nullable = false)
     private String explanation;
 
-    @Column(nullable = false)
-    private String startDateTime;
+    @ManyToOne(targetEntity = User.class)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User user;
 
     @Column(nullable = false)
-    private String endDateTime;
+    private LocalDateTime startDateTime;
+
+    @Column(nullable = false)
+    private LocalDateTime endDateTime;
 
     @Column(nullable = false)
     private Long targetFigure;
@@ -40,9 +46,17 @@ public class Project {
     @Column(nullable = false)
     private String state;
 
-    public Project(String title, String explanation, String startDateTime, String endDateTime, Long targetFigure, String openState, String state) {
+    public String getFormattedDateTime(LocalDateTime dateTime) {
+        if (dateTime == null) return "";
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:00"));
+    }
+    //DateTimeFormatter.ofPattern("yyyy-MM-dd. HH:mm:ss")
+
+    @Builder
+    public Project(String title, String explanation, User user, LocalDateTime startDateTime, LocalDateTime endDateTime, Long targetFigure, String openState, String state) {
         this.title = title;
         this.explanation = explanation;
+        this.user = user;
         this.startDateTime = startDateTime;
         this.endDateTime = endDateTime;
         this.targetFigure = targetFigure;
