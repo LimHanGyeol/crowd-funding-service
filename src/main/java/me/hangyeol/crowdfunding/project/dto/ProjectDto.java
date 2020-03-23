@@ -38,7 +38,7 @@ public abstract class ProjectDto {
                     .endDateTime(endDateTime)
                     .targetFigure(targetFigure)
                     .openState(openState)
-                    .state("진행중")
+                    .state("준비중")
                     .build();
         }
 
@@ -62,6 +62,14 @@ public abstract class ProjectDto {
         // 후원수
         // 후원액
 
+        public InfoRequest(String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+            this.title = title;
+            this.explanation = explanation;
+            this.targetFigure = targetFigure;
+            this.state = state;
+            this.startDateTime = startDateTime;
+            this.endDateTime = endDateTime;
+        }
     }
 
     @Getter

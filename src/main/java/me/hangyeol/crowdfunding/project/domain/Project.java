@@ -3,7 +3,9 @@ package me.hangyeol.crowdfunding.project.domain;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import me.hangyeol.crowdfunding.project.dto.ProjectDto;
 import me.hangyeol.crowdfunding.user.domain.User;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -62,5 +64,9 @@ public class Project {
         this.targetFigure = targetFigure;
         this.openState = openState;
         this.state = state;
+    }
+
+    public ProjectDto.InfoRequest toProjectDto() {
+        return new ProjectDto.InfoRequest(title, explanation, targetFigure, state, startDateTime, endDateTime);
     }
 }
