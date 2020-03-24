@@ -4,39 +4,31 @@ import me.hangyeol.crowdfunding.support.utils.HttpSessionUtil;
 import me.hangyeol.crowdfunding.user.dto.UserDto;
 import me.hangyeol.crowdfunding.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
-    public String loginForm() {
-        return "login";
-    }
-
-    @GetMapping("/join")
-    public String joinForm() {
-        return "join";
+    @PostMapping("")
+    public ResponseEntity<UserDto.InfoRequest> join(UserDto.JoinRequest userDto) {
+        UserDto.InfoRequest user = userService.join(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(user);
     }
 
     @PostMapping("/login")
-    public String login(String email, String password, HttpSession session) {
-        UserDto.InfoRequest user = userService.login(email, password);
-        if (user == null) return "redirect:login";
-        session.setAttribute(HttpSessionUtil.USER_SESSION_KEY, user);
-        return "redirect:/";
-    }
-
-    @PostMapping("/join")
-    public String join(UserDto.JoinRequest userDto) {
-        userService.join(userDto);
-        return "login";
+    public ResponseEntity<UserDto.InfoRequest> login(String email, String password, HttpSession session) {
+        UserDto.InfoRequest loginUser = userService.login(email, password);
+        session.setAttribute(HttpSessionUtil.USER_SESSION_KEY, loginUser);
+        return ResponseEntity.ok().body(loginUser);
     }
 }

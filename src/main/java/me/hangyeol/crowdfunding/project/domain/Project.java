@@ -69,4 +69,6 @@ public class Project {
     public ProjectDto.InfoRequest toProjectDto() {
         return new ProjectDto.InfoRequest(title, explanation, targetFigure, state, startDateTime, endDateTime);
     }
+
+
 }

@@ -51,14 +51,16 @@ public abstract class ProjectDto {
     public static class InfoRequest {
         private String title;
         private String explanation;
-        private Long targetFigure;
-        private String state;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime startDateTime;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime endDateTime;
+        private Long targetFigure;
+        private String OpenState;
+        private String state;
         // 창작자 이름
-        // 목표액
+        // 창작자 닉네임
+        // 창작자 핸드폰 번호
         // 후원수
         // 후원액
 
@@ -77,6 +79,16 @@ public abstract class ProjectDto {
     @ToString
     @NoArgsConstructor
     public static class UpdateRequest {
+        private String title;
+        private String explanation;
+        private String openState;
 
+        public Project toEntity() {
+            return Project.builder()
+                    .title(title)
+                    .explanation(explanation)
+                    .openState(openState)
+                    .build();
+        }
     }
 }

@@ -17,12 +17,12 @@ public class UserService {
         this.passwordHashUtil = passwordHashUtil;
     }
 
-    public void join(UserDto.JoinRequest userDto) {
+    public UserDto.InfoRequest join(UserDto.JoinRequest userDto) {
         if (userDto.getPassword().equals(userDto.getRePassword())) {
             String convertPassword = passwordHashUtil.getSha256(userDto.getPassword());
             userDto.setPassword(convertPassword);
-            userRepository.save(userDto.toEntity());
-        }
+        } // else 의 경우 Exception
+        return userRepository.save(userDto.toEntity()).toUserDto();
     }
 
     public UserDto.InfoRequest login(String email, String password) {
@@ -34,5 +34,9 @@ public class UserService {
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).get();
     }
 }

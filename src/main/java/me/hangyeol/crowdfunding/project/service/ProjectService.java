@@ -9,7 +9,6 @@ import me.hangyeol.crowdfunding.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -24,10 +23,14 @@ public class ProjectService {
     }
 
     // Create, Delete 는 Result 객체 만들어서 처리 - 보류
-    public void create(UserDto.InfoRequest sessionedUser, ProjectDto.CreateRequest projectDto) {
-        User user = findByEmail(sessionedUser.getEmail());
-        projectRepository.save(projectDto.toEntity(user));
+    public ProjectDto.InfoRequest create(UserDto.InfoRequest userDto, ProjectDto.CreateRequest projectDto) {
+        User user = findByEmail(userDto.getEmail());
+        return projectRepository.save(projectDto.toEntity(user)).toProjectDto();
     }
+
+//    public ProjectDto.InfoRequest create(ProjectDto.CreateRequest projectDto) {
+//        return projectRepository.save(projectDto.toEntity()).toProjectDto();
+//    }
 
     public List<ProjectDto.InfoRequest> readAll() {
         List<Project> projectList = findAll();
@@ -41,7 +44,10 @@ public class ProjectService {
         return findByTitle(title).toProjectDto();
     }
 
-    public void update() {
+    public ProjectDto.InfoRequest update(String title, ProjectDto.UpdateRequest projectDto) {
+        Project project = findByTitle(title);
+
+        return projectRepository.save(project).toProjectDto();
 
     }
 

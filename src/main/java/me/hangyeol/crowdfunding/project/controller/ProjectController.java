@@ -1,5 +1,6 @@
 package me.hangyeol.crowdfunding.project.controller;
 
+import me.hangyeol.crowdfunding.project.domain.Project;
 import me.hangyeol.crowdfunding.project.dto.ProjectDto;
 import me.hangyeol.crowdfunding.project.service.ProjectService;
 import me.hangyeol.crowdfunding.support.utils.HttpSessionUtil;
@@ -13,29 +14,29 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/project")
+@RequestMapping("/api/projects")
 public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
 
-    @GetMapping("")
+    @GetMapping("") // 전체 조회
     public ResponseEntity<List<ProjectDto.InfoRequest>> readAll() {
         return ResponseEntity.ok().body(projectService.readAll());
     }
 
-    @PostMapping("/project") // Create, Delete 는 Result를 담는 객체를 만들어서 리턴해야 할 듯
-    public String create(ProjectDto.CreateRequest projectDto, HttpSession session) {
+    @PostMapping("") // 추가 / Create, Delete 는 Result를 담는 객체를 만들어서 리턴해야 할 듯
+    public ResponseEntity<ProjectDto.InfoRequest> create(ProjectDto.CreateRequest projectDto, HttpSession session) {
         UserDto.InfoRequest userDto = HttpSessionUtil.getUserSession(session);
-        projectService.create(userDto, projectDto);
-        return "home";
+        ProjectDto.InfoRequest project = projectService.create(userDto, projectDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(project);
     }
 
-    @GetMapping("/{title}")
+    @GetMapping("/{title}") // 완료
     public ResponseEntity<ProjectDto.InfoRequest> readDetail(@PathVariable String title) {
         return ResponseEntity.ok().body(projectService.readDetail(title));
     }
-
+    // 해야함
     @PatchMapping("/{title}")
     public String update(@PathVariable String title, ProjectDto.UpdateRequest projectDto) {
         return "";
@@ -44,11 +45,8 @@ public class ProjectController {
     @DeleteMapping("/{title}")
     public ResponseEntity<HttpStatus> delete(@PathVariable String title) {
         Boolean projectResult = projectService.delete(title);
-
-        if (!projectResult) {
-            return (ResponseEntity<HttpStatus>) ResponseEntity.notFound();
-        }
-
-        return (ResponseEntity<HttpStatus>) ResponseEntity.noContent();
+        System.out.println(projectResult);
+        if (!projectResult) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
