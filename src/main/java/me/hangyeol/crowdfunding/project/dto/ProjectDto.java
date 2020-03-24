@@ -10,7 +10,9 @@ import me.hangyeol.crowdfunding.user.dto.UserDto;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Temporal;
+import javax.rmi.PortableRemoteObject;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public abstract class ProjectDto {
 
@@ -49,6 +51,7 @@ public abstract class ProjectDto {
     @ToString
     @NoArgsConstructor
     public static class InfoRequest {
+        private UUID id;
         private String title;
         private String explanation;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -59,13 +62,11 @@ public abstract class ProjectDto {
         private String openState;
         private String state;
         private UserDto.InfoRequest user;
-        // 창작자 이름
-        // 창작자 닉네임
-        // 창작자 핸드폰 번호
         // 후원수
         // 후원액
 
-        public InfoRequest(String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime, String openState ,UserDto.InfoRequest user) {
+        public InfoRequest(UUID id, String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime, String openState ,UserDto.InfoRequest user) {
+            this.id = id;
             this.title = title;
             this.explanation = explanation;
             this.targetFigure = targetFigure;
@@ -82,15 +83,28 @@ public abstract class ProjectDto {
     @ToString
     @NoArgsConstructor
     public static class UpdateRequest {
-        private String title;
-        private String explanation;
+        private String id;
+        private String updateTitle;
+        private String updateExplanation;
+        private User user;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        private LocalDateTime startDateTime;
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+        private LocalDateTime endDateTime;
+        private Long targetFigure;
         private String openState;
 
-        public Project toEntity() {
+        public Project toEntity(User user, ProjectDto.InfoRequest projectDto) {
             return Project.builder()
-                    .title(title)
-                    .explanation(explanation)
-                    .openState(openState)
+                    .id(UUID.fromString(id))
+                    .title(projectDto.getTitle())
+                    .explanation(projectDto.getExplanation())
+                    .user(user)
+                    .startDateTime(projectDto.getStartDateTime())
+                    .endDateTime(projectDto.getEndDateTime())
+                    .targetFigure(projectDto.getTargetFigure())
+                    .openState(projectDto.getOpenState())
+                    .state("준비중")
                     .build();
         }
     }

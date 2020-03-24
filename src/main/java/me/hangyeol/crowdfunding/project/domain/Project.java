@@ -1,5 +1,6 @@
 package me.hangyeol.crowdfunding.project.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -33,9 +34,11 @@ public class Project {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(nullable = false)
     private LocalDateTime startDateTime;
 
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
     @Column(nullable = false)
     private LocalDateTime endDateTime;
 
@@ -55,7 +58,8 @@ public class Project {
     //DateTimeFormatter.ofPattern("yyyy-MM-dd. HH:mm:ss")
 
     @Builder
-    public Project(String title, String explanation, User user, LocalDateTime startDateTime, LocalDateTime endDateTime, Long targetFigure, String openState, String state) {
+    public Project(UUID id, String title, String explanation, User user, LocalDateTime startDateTime, LocalDateTime endDateTime, Long targetFigure, String openState, String state) {
+        this.id = id;
         this.title = title;
         this.explanation = explanation;
         this.user = user;
@@ -67,7 +71,7 @@ public class Project {
     }
 
     public ProjectDto.InfoRequest toProjectDto() {
-        return new ProjectDto.InfoRequest(title, explanation, targetFigure, state, startDateTime, endDateTime, openState, user.toUserDto());
+        return new ProjectDto.InfoRequest(id, title, explanation, targetFigure, state, startDateTime, endDateTime, openState, user.toUserDto());
     }
 
 

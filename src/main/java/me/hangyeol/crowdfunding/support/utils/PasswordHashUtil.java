@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 
 import java.security.MessageDigest;
 
-@Service
 public class PasswordHashUtil {
 
     public String getSha256(String password) {

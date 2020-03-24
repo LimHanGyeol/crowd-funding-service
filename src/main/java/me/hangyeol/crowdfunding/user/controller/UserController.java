@@ -16,8 +16,11 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/api/users")
 public class UserController {
 
-    @Autowired
     private UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("")
     public ResponseEntity<UserDto.InfoRequest> join(UserDto.JoinRequest userDto) {

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ProjectService {
@@ -40,13 +41,21 @@ public class ProjectService {
         return findByTitle(title).toProjectDto();
     }
 
-    public ProjectDto.InfoRequest update(String title, UserDto.InfoRequest userDto ,ProjectDto.UpdateRequest projectDto) {
-        UserDto.InfoRequest user = findByEmail(userDto.getEmail()).toUserDto();
+    public ProjectDto.InfoRequest update(String title, UserDto.InfoRequest userDto , ProjectDto.UpdateRequest projectDto) {
+        User user = findByEmail(userDto.getEmail());
         ProjectDto.InfoRequest project = findByTitle(title).toProjectDto();
-        if (!user.getEmail().equals(project.getUser().getEmail())) {
+        System.out.println("=================="+project.getId().toString());
+        System.out.println("=================="+projectDto.getId().toString());
+
+        if (!user.toUserDto().getEmail().equals(project.getUser().getEmail())) {
             return null; // Exception Message
         }
-        return projectRepository.save(projectDto.toEntity()).toProjectDto();
+        if (project.getTitle().equals(title)) {
+            project.setTitle(projectDto.getUpdateTitle());
+            project.setExplanation(projectDto.getUpdateExplanation());
+            project.setOpenState(projectDto.getOpenState());
+        }
+        return projectRepository.save(projectDto.toEntity(user, project)).toProjectDto();
     }
 
     public Boolean delete(String title) {
@@ -69,6 +78,10 @@ public class ProjectService {
 
     public List<Project> findAll() {
         return projectRepository.findAll();
+    }
+
+    public Project findById(UUID id) {
+        return projectRepository.findById(id).get();
     }
 
 

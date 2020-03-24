@@ -4,7 +4,6 @@ import me.hangyeol.crowdfunding.project.dto.ProjectDto;
 import me.hangyeol.crowdfunding.project.service.ProjectService;
 import me.hangyeol.crowdfunding.support.utils.HttpSessionUtil;
 import me.hangyeol.crowdfunding.user.dto.UserDto;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
