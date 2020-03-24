@@ -28,10 +28,6 @@ public class ProjectService {
         return projectRepository.save(projectDto.toEntity(user)).toProjectDto();
     }
 
-//    public ProjectDto.InfoRequest create(ProjectDto.CreateRequest projectDto) {
-//        return projectRepository.save(projectDto.toEntity()).toProjectDto();
-//    }
-
     public List<ProjectDto.InfoRequest> readAll() {
         List<Project> projectList = findAll();
         List<ProjectDto.InfoRequest> projectDtoList = new ArrayList<>();
@@ -44,11 +40,13 @@ public class ProjectService {
         return findByTitle(title).toProjectDto();
     }
 
-    public ProjectDto.InfoRequest update(String title, ProjectDto.UpdateRequest projectDto) {
-        Project project = findByTitle(title);
-
-        return projectRepository.save(project).toProjectDto();
-
+    public ProjectDto.InfoRequest update(String title, UserDto.InfoRequest userDto ,ProjectDto.UpdateRequest projectDto) {
+        UserDto.InfoRequest user = findByEmail(userDto.getEmail()).toUserDto();
+        ProjectDto.InfoRequest project = findByTitle(title).toProjectDto();
+        if (!user.getEmail().equals(project.getUser().getEmail())) {
+            return null; // Exception Message
+        }
+        return projectRepository.save(projectDto.toEntity()).toProjectDto();
     }
 
     public Boolean delete(String title) {

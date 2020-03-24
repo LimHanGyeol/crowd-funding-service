@@ -56,21 +56,24 @@ public abstract class ProjectDto {
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime endDateTime;
         private Long targetFigure;
-        private String OpenState;
+        private String openState;
         private String state;
+        private UserDto.InfoRequest user;
         // 창작자 이름
         // 창작자 닉네임
         // 창작자 핸드폰 번호
         // 후원수
         // 후원액
 
-        public InfoRequest(String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime) {
+        public InfoRequest(String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime, String openState ,UserDto.InfoRequest user) {
             this.title = title;
             this.explanation = explanation;
             this.targetFigure = targetFigure;
             this.state = state;
             this.startDateTime = startDateTime;
             this.endDateTime = endDateTime;
+            this.openState = openState;
+            this.user = user;
         }
     }
 
