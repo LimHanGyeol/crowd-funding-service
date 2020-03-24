@@ -1,6 +1,5 @@
 package me.hangyeol.crowdfunding.support.utils;
 
-import me.hangyeol.crowdfunding.user.domain.User;
 import me.hangyeol.crowdfunding.user.dto.UserDto;
 
 import javax.servlet.http.HttpSession;

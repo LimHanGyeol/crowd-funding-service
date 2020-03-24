@@ -21,9 +21,14 @@ public class ProjectController {
         this.projectService = projectService;
     }
 
-    @GetMapping("") // 전체 조회
-    public ResponseEntity<List<ProjectDto.InfoRequest>> readAll() {
-        return ResponseEntity.ok().body(projectService.readAll());
+
+    private int returnIntValue(String stringToInt) {
+        return Integer.parseInt(stringToInt);
+    }
+
+    @GetMapping("") // 전체 조회 페이징
+    public ResponseEntity<List<ProjectDto.InfoRequest>> readAll(@RequestParam(value = "pageNum", defaultValue = "1") String pageNum) {
+        return ResponseEntity.ok().body(projectService.readAll(returnIntValue(pageNum)));
     }
 
     @PostMapping("") // 추가 / Create, Delete 는 Result를 담는 객체를 만들어서 리턴해야 할 듯
@@ -38,7 +43,7 @@ public class ProjectController {
         return ResponseEntity.ok().body(projectService.readDetail(title));
     }
     // 해야함
-    @PatchMapping("/{title}")
+    @PatchMapping("/{title}") // 리팩토링 필요 - LocalDateTime Input 처리 필요 - UUID 연동 재확인 필요
     public ResponseEntity<ProjectDto.InfoRequest> update(@PathVariable String title, HttpSession session, ProjectDto.UpdateRequest projectDto) {
         UserDto.InfoRequest userDto = HttpSessionUtil.getUserSession(session);
         ProjectDto.InfoRequest project = projectService.update(title, userDto, projectDto);
