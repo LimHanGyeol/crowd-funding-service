@@ -1,9 +1,8 @@
 package me.hangyeol.crowdfunding.domain;
 
 
-import me.hangyeol.crowdfunding.support.utils.PasswordHashUtil;
+import me.hangyeol.crowdfunding.support.utils.PasswordHashUtils;
 import me.hangyeol.crowdfunding.user.domain.User;
-import me.hangyeol.crowdfunding.user.dto.UserDto;
 import me.hangyeol.crowdfunding.user.service.UserService;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,13 +19,13 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 public class UserTest {
 
-    private PasswordHashUtil passwordHashUtil;
+    @Autowired
+    private PasswordHashUtils passwordHashUtils;
     @Autowired
     private UserService userService;
 
     @Before
     public void setUp() throws Exception {
-        passwordHashUtil = new PasswordHashUtil();
     }
 
     @Test
@@ -37,8 +36,8 @@ public class UserTest {
 
     @Test
     public void metchPassword() {
-        String convertPassword = passwordHashUtil.getSha256("1111");
-        User user = new User("임한결","01043765678","dlagksruf19@naver.com","1111");
+        String convertPassword = passwordHashUtils.getSha256("1111");
+        User user = new User("임한결","01043765678","dlagksruf19@naver.com",convertPassword);
         assertTrue(user.matchPassword(convertPassword));
     }
 }

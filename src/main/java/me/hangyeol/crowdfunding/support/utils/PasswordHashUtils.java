@@ -2,7 +2,7 @@ package me.hangyeol.crowdfunding.support.utils;
 
 import java.security.MessageDigest;
 
-public class PasswordHashUtil {
+public class PasswordHashUtils {
 
     public String getSha256(String password) {
         String convertPassword = "";

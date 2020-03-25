@@ -4,7 +4,7 @@ import me.hangyeol.crowdfunding.user.dto.UserDto;
 
 import javax.servlet.http.HttpSession;
 
-public class HttpSessionUtil {
+public class HttpSessionUtils {
     public static final String USER_SESSION_KEY = "sessionUser";
 
     public static boolean isLoginUserSession(HttpSession session) {
