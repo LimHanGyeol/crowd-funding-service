@@ -1,6 +1,6 @@
 package me.hangyeol.crowdfunding.support.config;
 
-import me.hangyeol.crowdfunding.support.utils.PasswordHashUtil;
+import me.hangyeol.crowdfunding.support.utils.PasswordHashUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -16,15 +16,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class WebMvcConfig {
 
     @Bean
-    public PasswordHashUtil passwordHashUtil() {
-        return new PasswordHashUtil();
+    public PasswordHashUtils passwordHashUtil() {
+        return new PasswordHashUtils();
     }
 
     @Bean
     public Docket newsApi() {
         return new Docket(DocumentationType.SWAGGER_2)
+                .useDefaultResponseMessages(false)
                 .select()
-                .apis(RequestHandlerSelectors.any())
+                .apis(RequestHandlerSelectors.basePackage("me.hangyeol.crowdfunding"))
                 .paths(PathSelectors.ant("/api/**"))
                 .build()
                 .apiInfo(apiInfo())

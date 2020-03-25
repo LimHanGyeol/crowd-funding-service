@@ -1,12 +1,10 @@
 package me.hangyeol.crowdfunding.project.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 import me.hangyeol.crowdfunding.project.dto.ProjectDto;
 import me.hangyeol.crowdfunding.user.domain.User;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -21,7 +19,7 @@ public class Project {
     @Id
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(columnDefinition = "BINARY(16)")
+    @Column(columnDefinition = "uuid", updatable = false)
     private UUID id;
 
     @Column(nullable = false, length = 50)
@@ -34,21 +32,19 @@ public class Project {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false) // 24시간 단위
     private LocalDateTime startDateTime;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", shape = JsonFormat.Shape.STRING)
-    @Column(nullable = false)
+    @Column(nullable = false) // 24시간 단위
     private LocalDateTime endDateTime;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // max 100,000,000
     private Long targetFigure;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // 공개/비공개 default : 공개
     private String openState;
 
-    @Column(nullable = false)
+    @Column(nullable = false) // 준비중/진행중/성공/실패
     private String state;
 
     public String getFormattedDateTime(LocalDateTime dateTime) {

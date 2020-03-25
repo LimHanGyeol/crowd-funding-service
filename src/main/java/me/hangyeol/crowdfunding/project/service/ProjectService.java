@@ -1,7 +1,10 @@
 package me.hangyeol.crowdfunding.project.service;
 
+import me.hangyeol.crowdfunding.project.domain.Funding;
+import me.hangyeol.crowdfunding.project.domain.FundingRepository;
 import me.hangyeol.crowdfunding.project.domain.Project;
 import me.hangyeol.crowdfunding.project.domain.ProjectRepository;
+import me.hangyeol.crowdfunding.project.dto.FundingDto;
 import me.hangyeol.crowdfunding.project.dto.ProjectDto;
 import me.hangyeol.crowdfunding.user.domain.User;
 import me.hangyeol.crowdfunding.user.domain.UserRepository;
@@ -20,10 +23,12 @@ public class ProjectService {
 
     private ProjectRepository projectRepository;
     private UserRepository userRepository;
+    private FundingRepository fundingRepository;
 
-    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository) {
+    public ProjectService(ProjectRepository projectRepository, UserRepository userRepository, FundingRepository fundingRepository) {
         this.projectRepository = projectRepository;
         this.userRepository = userRepository;
+        this.fundingRepository = fundingRepository;
     }
 
     private Page<Project> getProjectPage(PageRequest pageRequest) {
@@ -40,13 +45,9 @@ public class ProjectService {
 
     public List<ProjectDto.InfoRequest> readAll(int pageNum) {
         Page<Project> projectsPage = projectPage(pageNum);
-        System.out.println("=============="+projectsPage.toString());
         List<ProjectDto.InfoRequest> projectDtoList = new ArrayList<>();
 
-        for (Project project : projectsPage) {
-            System.out.println("===========" + project);
-            projectDtoList.add(project.toProjectDto());
-        }
+        for (Project project : projectsPage) projectDtoList.add(project.toProjectDto());
         return projectDtoList;
     }
 
@@ -54,6 +55,7 @@ public class ProjectService {
         return findByTitle(title).toProjectDto();
     }
 
+    // 리팩토링 - User를 UserDto로 받아서 처리해보기
     public ProjectDto.InfoRequest create(UserDto.InfoRequest userDto, ProjectDto.CreateRequest projectDto) {
         User user = findByEmail(userDto.getEmail());
         return projectRepository.save(projectDto.toEntity(user)).toProjectDto();
@@ -63,7 +65,7 @@ public class ProjectService {
         User user = findByEmail(userDto.getEmail());
         ProjectDto.InfoRequest project = findByTitle(title).toProjectDto();
         System.out.println("=================="+project.getId().toString());
-        System.out.println("=================="+projectDto.getId().toString());
+        System.out.println("=================="+projectDto.getId());
 
         if (!user.toUserDto().getEmail().equals(project.getUser().getEmail())) {
             return null; // Exception Message
@@ -94,9 +96,44 @@ public class ProjectService {
         return userRepository.findByEmail(email);
     }
 
+    public Funding findByProjectId(UUID projectId) {
+        return fundingRepository.findByProjectId(projectId);
+    }
+
+    public List<Funding> fundingFindAll() {
+
+        return fundingRepository.findAll();
+    }
+
+    public FundingDto.totalRequest totalFundingData(String title, ProjectDto.InfoRequest projectDto) {
+        System.out.println("&&&&&&&&&" + projectDto.getId());
+//        List<Funding> fundingList = fundingFindAll();
+//        System.out.println("&&&&&&&&&" + fundingList.toString());
+        Funding funding = findByProjectId(projectDto.getId());
+        System.out.println(funding);
+        List<FundingDto.InfoRequest> fundingDtoList = new ArrayList<>();
+        int totalFundingPrice = 0;
+        int totalFundingPeople = 0;
+
+//        for (Funding funding : fundingList) {
+//            fundingDtoList.add(funding.toFundingDto());
+//        }
+
+        for (int i = 0; i < fundingDtoList.size(); i++) {
+            if (fundingDtoList.get(i).getProjectId().equals(projectDto.getId())) {
+                FundingDto.InfoRequest fundingValue = fundingDtoList.get(i);
+                totalFundingPrice+= fundingValue.getFund();
+                totalFundingPeople ++;
+            }
+        }
+        FundingDto.totalRequest totalRequest = new FundingDto.totalRequest();
+        totalRequest.setTotalFundingPeople(totalFundingPeople);
+        totalRequest.setTotalFundingPrice(totalFundingPrice);
+        return totalRequest;
+    }
+
     public Project findById(UUID id) {
         return projectRepository.findById(id).get();
     }
-
 
 }

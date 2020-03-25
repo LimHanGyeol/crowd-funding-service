@@ -41,6 +41,6 @@ public class User {
     }
 
     public UserDto.InfoRequest toUserDto() {
-        return new UserDto.InfoRequest(name, phoneNum, email);
+        return new UserDto.InfoRequest(id, name, phoneNum, email);
     }
 }

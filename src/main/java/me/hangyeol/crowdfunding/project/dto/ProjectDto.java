@@ -9,8 +9,7 @@ import me.hangyeol.crowdfunding.user.domain.User;
 import me.hangyeol.crowdfunding.user.dto.UserDto;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.Temporal;
-import javax.rmi.PortableRemoteObject;
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -21,7 +20,9 @@ public abstract class ProjectDto {
     @ToString
     @NoArgsConstructor
     public static class CreateRequest {
+        @NotBlank(message = "프로젝트 제목을 입력해주세요.")
         private String title;
+        @NotBlank(message = "프로젝트 설명을 입력해주세요.")
         private String explanation;
         private User user;
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -76,6 +77,7 @@ public abstract class ProjectDto {
             this.openState = openState;
             this.user = user;
         }
+
     }
 
     @Getter
