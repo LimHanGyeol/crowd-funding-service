@@ -13,34 +13,44 @@ import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
 public abstract class ProjectDto {
+
+    @NotBlank(message = "프로젝트 제목을 입력해주세요.")
+    private String title;
+
+    @NotBlank(message = "프로젝트 설명을 입력해주세요.")
+    private String explanation;
+
+    //    private UserDto.InfoRequest user;
+    private User user;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime startDateTime;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
+    private LocalDateTime endDateTime;
+
+    private Long targetFigure;
+
+    private String openState;
 
     @Getter
     @Setter
     @ToString
     @NoArgsConstructor
-    public static class CreateRequest {
-        @NotBlank(message = "프로젝트 제목을 입력해주세요.")
-        private String title;
-        @NotBlank(message = "프로젝트 설명을 입력해주세요.")
-        private String explanation;
-        private User user;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        private LocalDateTime startDateTime;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        private LocalDateTime endDateTime;
-        private Long targetFigure;
-        private String openState;
+    public static class CreateRequest extends ProjectDto {
 
         public Project toEntity(User user) {
             return Project.builder()
-                    .title(title)
-                    .explanation(explanation)
+                    .title(super.title)
+                    .explanation(super.explanation)
                     .user(user)
-                    .startDateTime(startDateTime)
-                    .endDateTime(endDateTime)
-                    .targetFigure(targetFigure)
-                    .openState(openState)
+                    .startDateTime(super.startDateTime)
+                    .endDateTime(super.endDateTime)
+                    .targetFigure(super.targetFigure)
+                    .openState(super.openState)
                     .state("준비중")
                     .build();
         }
@@ -51,31 +61,25 @@ public abstract class ProjectDto {
     @Setter
     @ToString
     @NoArgsConstructor
-    public static class InfoRequest {
+    public static class InfoRequest extends ProjectDto {
         private UUID id;
-        private String title;
-        private String explanation;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        private LocalDateTime startDateTime;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        private LocalDateTime endDateTime;
         private Long targetFigure;
         private String openState;
         private String state;
-        private UserDto.InfoRequest user;
+        private UserDto.InfoRequest userDto;
         // 후원수
         // 후원액
 
         public InfoRequest(UUID id, String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime, String openState ,UserDto.InfoRequest user) {
             this.id = id;
-            this.title = title;
-            this.explanation = explanation;
+            super.title = title;
+            super.explanation = explanation;
             this.targetFigure = targetFigure;
             this.state = state;
-            this.startDateTime = startDateTime;
-            this.endDateTime = endDateTime;
+            super.startDateTime = startDateTime;
+            super.endDateTime = endDateTime;
             this.openState = openState;
-            this.user = user;
+            this.userDto = user;
         }
 
     }
@@ -84,17 +88,10 @@ public abstract class ProjectDto {
     @Setter
     @ToString
     @NoArgsConstructor
-    public static class UpdateRequest {
+    public static class UpdateRequest extends ProjectDto {
         private String id;
         private String updateTitle;
         private String updateExplanation;
-        private User user;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        private LocalDateTime startDateTime;
-        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-        private LocalDateTime endDateTime;
-        private Long targetFigure;
-        private String openState;
 
         public Project toEntity(User user, ProjectDto.InfoRequest projectDto) {
             return Project.builder()

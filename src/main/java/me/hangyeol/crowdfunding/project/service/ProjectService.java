@@ -67,12 +67,14 @@ public class ProjectService {
         System.out.println("=================="+project.getId().toString());
         System.out.println("=================="+projectDto.getId());
 
-        if (!user.toUserDto().getEmail().equals(project.getUser().getEmail())) {
-            return null; // Exception Message
-        }
+//        if (!user.toUserDto().getEmail().equals(project.getUser().toUserDto().getEmail())) {
+//            return null; // Exception Message
+//        }
         if (project.getTitle().equals(title)) {
             project.setTitle(projectDto.getUpdateTitle());
+//            project.setTitle(projectDto.getTitle());
             project.setExplanation(projectDto.getUpdateExplanation());
+//            project.setExplanation(projectDto.getExplanation());
             project.setOpenState(projectDto.getOpenState());
         }
         return projectRepository.save(projectDto.toEntity(user, project)).toProjectDto();
