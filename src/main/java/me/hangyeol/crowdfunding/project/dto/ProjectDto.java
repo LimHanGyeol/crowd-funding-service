@@ -23,7 +23,7 @@ public abstract class ProjectDto {
     @NotBlank(message = "프로젝트 설명을 입력해주세요.")
     private String explanation;
 
-    //    private UserDto.InfoRequest user;
+    //    private UserDto.InfoResponse user;
     private User user;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
@@ -61,7 +61,7 @@ public abstract class ProjectDto {
     @Setter
     @ToString
     @NoArgsConstructor
-    public static class InfoRequest extends ProjectDto {
+    public static class InfoResponse extends ProjectDto {
         private UUID id;
         private Long targetFigure;
         private String openState;
@@ -70,7 +70,7 @@ public abstract class ProjectDto {
         // 후원수
         // 후원액
 
-        public InfoRequest(UUID id, String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime, String openState ,UserDto.InfoRequest user) {
+        public InfoResponse(UUID id, String title, String explanation, Long targetFigure, String state, LocalDateTime startDateTime, LocalDateTime endDateTime, String openState , UserDto.InfoRequest user) {
             this.id = id;
             super.title = title;
             super.explanation = explanation;
@@ -93,7 +93,7 @@ public abstract class ProjectDto {
         private String updateTitle;
         private String updateExplanation;
 
-        public Project toEntity(User user, ProjectDto.InfoRequest projectDto) {
+        public Project toEntity(User user, InfoResponse projectDto) {
             return Project.builder()
                     .id(UUID.fromString(id))
                     .title(projectDto.getTitle())

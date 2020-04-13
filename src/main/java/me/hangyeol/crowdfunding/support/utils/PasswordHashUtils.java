@@ -5,7 +5,7 @@ import java.security.MessageDigest;
 public class PasswordHashUtils {
 
     public String getSha256(String password) {
-        String convertPassword = "";
+        String convertPassword;
         try {
             MessageDigest encrypt = MessageDigest.getInstance("SHA-256");
             encrypt.update(password.getBytes());

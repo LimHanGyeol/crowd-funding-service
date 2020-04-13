@@ -66,8 +66,8 @@ public class Project {
         this.state = state;
     }
 
-    public ProjectDto.InfoRequest toProjectDto() {
-        return new ProjectDto.InfoRequest(id, title, explanation, targetFigure, state, startDateTime, endDateTime, openState, user.toUserDto());
+    public ProjectDto.InfoResponse toProjectDto() {
+        return new ProjectDto.InfoResponse(id, title, explanation, targetFigure, state, startDateTime, endDateTime, openState, user.toUserDto());
     }
 
 

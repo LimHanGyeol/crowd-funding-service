@@ -27,7 +27,7 @@ public class FundingService {
     }
 
     @Transactional
-    public ProjectDto.InfoRequest funding(String title, FundingDto.FundRequest fundingDto) {
+    public ProjectDto.InfoResponse funding(String title, FundingDto.FundRequest fundingDto) {
         // 프로젝트 ID 찾기
         Project project = findByTitle(title);
         // User 정보 가져오기

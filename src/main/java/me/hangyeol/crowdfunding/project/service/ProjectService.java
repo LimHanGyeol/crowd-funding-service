@@ -35,35 +35,35 @@ public class ProjectService {
         return projectRepository.findAll(pageRequest);
     }
 
-    private PageRequest pageRequest(int pageNum) {
+    private PageRequest getPageRequest(int pageNum) {
         return PageRequest.of(pageNum - 1, 10, Sort.Direction.DESC, "title");
     }
 
-    public Page<Project> projectPage(int pageNum) {
-        return getProjectPage(pageRequest(pageNum));
+    public Page<Project> createProjectPage(int pageNum) {
+        return getProjectPage(getPageRequest(pageNum));
     }
 
-    public List<ProjectDto.InfoRequest> readAll(int pageNum) {
-        Page<Project> projectsPage = projectPage(pageNum);
-        List<ProjectDto.InfoRequest> projectDtoList = new ArrayList<>();
+    public List<ProjectDto.InfoResponse> readAll(int pageNum) {
+        Page<Project> projectsPage = createProjectPage(pageNum);
+        List<ProjectDto.InfoResponse> projectDtoList = new ArrayList<>();
 
         for (Project project : projectsPage) projectDtoList.add(project.toProjectDto());
         return projectDtoList;
     }
 
-    public ProjectDto.InfoRequest readDetail(String title) {
+    public ProjectDto.InfoResponse readDetail(String title) {
         return findByTitle(title).toProjectDto();
     }
 
     // 리팩토링 - User를 UserDto로 받아서 처리해보기
-    public ProjectDto.InfoRequest create(UserDto.InfoRequest userDto, ProjectDto.CreateRequest projectDto) {
+    public ProjectDto.InfoResponse create(UserDto.InfoRequest userDto, ProjectDto.CreateRequest projectDto) {
         User user = findByEmail(userDto.getEmail());
         return projectRepository.save(projectDto.toEntity(user)).toProjectDto();
     }
 
-    public ProjectDto.InfoRequest update(String title, UserDto.InfoRequest userDto , ProjectDto.UpdateRequest projectDto) {
+    public ProjectDto.InfoResponse update(String title, UserDto.InfoRequest userDto , ProjectDto.UpdateRequest projectDto) {
         User user = findByEmail(userDto.getEmail());
-        ProjectDto.InfoRequest project = findByTitle(title).toProjectDto();
+        ProjectDto.InfoResponse project = findByTitle(title).toProjectDto();
         System.out.println("=================="+project.getId().toString());
         System.out.println("=================="+projectDto.getId());
 
@@ -107,7 +107,7 @@ public class ProjectService {
         return fundingRepository.findAll();
     }
 
-    public FundingDto.totalRequest totalFundingData(String title, ProjectDto.InfoRequest projectDto) {
+    public FundingDto.totalRequest totalFundingData(String title, ProjectDto.InfoResponse projectDto) {
         System.out.println("&&&&&&&&&" + projectDto.getId());
 //        List<Funding> fundingList = fundingFindAll();
 //        System.out.println("&&&&&&&&&" + fundingList.toString());
